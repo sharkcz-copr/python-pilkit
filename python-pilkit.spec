@@ -4,7 +4,7 @@
 
 Name:           python-%{srcname}
 Version:        2.0
-Release:        1.git%{shortcommit}%{?dist}
+Release:        2.git%{shortcommit}%{?dist}
 Summary:        A collection of utilities and processors for the Python Imaging Libary
 License:        BSD
 URL:            https://github.com/matthewwithanm/pilkit/
@@ -58,5 +58,8 @@ BuildRequires:  python3-mock
 
 
 %changelog
+* Fri Jun 30 2023 Dan Horák <dan[at]danny.cz> - 2.0-2.git09ffa2a
+- rebuild
+
 * Mon Jun 20 2022 Dan Horák <dan[at]danny.cz> - 2.0-1.git09ffa2a
 - initial Fedora version
