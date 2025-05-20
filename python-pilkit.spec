@@ -2,11 +2,13 @@
 
 Name:           python-%{srcname}
 Version:        3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A collection of utilities and processors for the Python Imaging Libary
 License:        BSD-3-Clause
 URL:            https://github.com/matthewwithanm/pilkit/
 Source0:        https://files.pythonhosted.org/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
+# post GA fixes
+Patch0:         pilkit-3.0-fixes.patch
 BuildArch:      noarch
 
 %global _description %{expand:
@@ -52,6 +54,9 @@ BuildRequires:  python3-mock
 
 
 %changelog
+* Tue May 20 2025 Dan Horák <dan[at]danny.cz> - 3.0-2
+- add post GA fixes
+
 * Fri Nov 03 2023 Dan Horák <dan[at]danny.cz> - 3.0-1
 - updated to 3.0
 

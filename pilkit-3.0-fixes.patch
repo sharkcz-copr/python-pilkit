@@ -1,0 +1,57 @@
+From a594098e9be162bff2ff6988ec7be0c87eeeb888 Mon Sep 17 00:00:00 2001
+From: pix666 <x896321475@gmail.com>
+Date: Fri, 15 Mar 2024 15:00:05 +0400
+Subject: [PATCH 1/2] Preserve transparency in palette-based PNG
+
+---
+ pilkit/processors/utils.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/pilkit/processors/utils.py b/pilkit/processors/utils.py
+index a0d08ed..587ee5b 100644
+--- a/pilkit/processors/utils.py
++++ b/pilkit/processors/utils.py
+@@ -29,4 +29,9 @@ def resolve_palette(image):
+ 
+     if image.palette is None:
+         return image
+-    return image.convert(image.palette.mode)
+\ No newline at end of file
++
++    has_transparency = "transparency" in image.info
++    mode = image.palette.mode
++    if mode == "RGB" and has_transparency:
++        mode = "RGBA"
++    return image.convert(mode)
+-- 
+2.49.0
+
+
+From 90de1ece9b6504bde08362472178ace50c613878 Mon Sep 17 00:00:00 2001
+From: scyclops <scyclops@users.noreply.github.com>
+Date: Tue, 14 May 2024 21:28:05 -0500
+Subject: [PATCH 2/2] Fix border color trimming for Pillow 10+
+
+Pillow 10+ added an alpha_only keyword parameter to getbbox that defaults to True.  For the border trimmer to work correctly, alpha_only must be set to False.
+
+https://pillow.readthedocs.io/en/stable/releasenotes/10.0.0.html
+---
+ pilkit/processors/crop.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pilkit/processors/crop.py b/pilkit/processors/crop.py
+index b039d30..e8eccc1 100644
+--- a/pilkit/processors/crop.py
++++ b/pilkit/processors/crop.py
+@@ -66,7 +66,7 @@ class TrimBorderColor(object):
+                     .convert('RGBA')
+             diff = ImageChops.subtract(diff, tmp)
+ 
+-        bbox = diff.getbbox()
++        bbox = diff.getbbox(alpha_only=False)
+         if bbox:
+             img = _crop(img, bbox, self.sides)
+         return img
+-- 
+2.49.0
+
